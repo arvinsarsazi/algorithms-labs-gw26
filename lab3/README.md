@@ -142,8 +142,8 @@ and the array state after each step. The first row is worked.
 | Step | Current `i` | Value at `i` | Children (left, right) | Largest index | Action taken | Array afterward |
 |---|---|---|---|---|---|---|
 | 1 | 0 | 4 | `left=1` (10), `right=2` (8) | 1 | Swap `arr[0]` with `arr[1]` | `[10, 4, 8, 5, 1, 2, 7]` |
-| 2 | TODO | TODO | TODO | TODO | TODO | TODO |
-| 3 | TODO | TODO | TODO | TODO | TODO | TODO |
+| 2 | 1 | 4 | `left=3` (5), `right=4` (1) | 3 | Swap `arr[1]` with `arr[3]` | `[10, 5, 8, 4, 1, 2, 7]` |
+| 3 | 3 | 4 | DNE | 3 | None | `[10, 5, 8, 4, 1, 2, 7]` |
 
 ### 1.2 Trace: Heapsort extraction passes
 
@@ -156,13 +156,14 @@ the growing sorted suffix. Pass 1 is worked.
 | Pass (`end`) | Swap root with `arr[end]` | Active heap size | Active heap after `max_heapify_down` | Sorted suffix | Full array afterward |
 |---|---|---|---|---|---|
 | 6 | Swap `15` with `7` | 6 | `[12, 7, 8, 6, 2, 3]` | `[15]` | `[12, 7, 8, 6, 2, 3, 15]` |
-| 5 | TODO | TODO | TODO | TODO | TODO |
-| 4 | TODO | TODO | TODO | TODO | TODO |
-| 3 | TODO | TODO | TODO | TODO | TODO |
-| 2 | TODO | TODO | TODO | TODO | TODO |
-| 1 | TODO | TODO | TODO | TODO | TODO |
+| 5 | Swap `12` with `3` | 5 | `[8, 7, 3, 6, 2]` | `[12, 15]` | `[8, 7, 3, 6, 2, 12, 15]` |
+| 4 | Swap `8` with `2` | 4 | `[7, 6, 3, 2]` | `[8, 12, 15]` | `[ 7, 6, 3, 2, 8, 12, 15]` | 
+| 3 | Swap `7` with `2` | 3 | `[6, 2, 3] ` | `[7, 8, 12, 15] ` | ` ` |
+| 2 | Swap `6` with `2` | 2 | `[3, 2]` | ` ` | ` ` |
+| 1 | Swap `3` with `2` | 1 | `[2]` | ` ` | ` [ 2, 3, 6, 7, 8, 12, 15] ` |
 
 Record the final sorted array returned by `heap_sort`.
+[ 2, 3, 6, 7, 8, 12, 15]
 
 ### 1.3 Implementation
 
@@ -179,10 +180,14 @@ python3 heap_practice.py
 **TODO 1.4A:** Why does using a Max-Heap produce an *ascending* sort when
 repeatedly extracting the root to the end of the array, whereas using a Min-Heap
 produces a descending sort?
+Because with max heap we are sending the root which is the biggest to the end repeatedly, so the order is ascending.
+Same with min heap but opposite.
 
 **TODO 1.4B:** Bottom-up heap construction (`build_max_heap`) takes $O(n)$ time,
 yet `heap_sort` overall requires $O(n \log n)$ time. Where does the additional
 time come from during the sorting phase?
+
+The extra time is from the sorting phase, where about n elements are removed and each time we sift down it takes approximately (O(log n)). Therefore, the sorting phase takes (O(nlog n)) total.
 
 Building a heap takes $\Theta(n)$ time. Each of the $n - 1$ extractions performs
 at most $O(\log n)$ sift-down work, yielding $\Theta(n \log n)$ total time and

@@ -78,19 +78,21 @@ not just their indices. The array state is the state after that comparison.
 
 | Pass | `j` | Values compared | Swap or keep? | Array afterward |
 |---|---|---|---|---|
-| 2 | 0 | TODO | TODO | TODO |
-| 2 | 1 | TODO | TODO | TODO |
-| 2 | 2 | TODO | TODO | TODO |
-| 2 | 3 | TODO | TODO | TODO |
-| 3 | 0 | TODO | TODO | TODO |
-| 3 | 1 | TODO | TODO | TODO |
-| 3 | 2 | TODO | TODO | TODO |
-| 4 | 0 | TODO | TODO | TODO |
-| 4 | 1 | TODO | TODO | TODO |
+| 2 | 0 | `2 > 5` | Keep | `[2, 5, 1, 5, 6, 9]` |
+| 2 | 1 | `5 > 1` | Swap | `[2, 1, 5, 5, 6, 9]` |
+| 2 | 2 | `5 > 5` | Keep | `[2, 1, 5, 5, 6, 9]` |
+| 2 | 3 | `5 > 6` | Keep | `[2, 1, 5, 5, 6, 9]` |
+| 3 | 0 | `2 > 1` | Swap | `[1, 2, 5, 5, 6, 9]` |
+| 3 | 1 | `2 > 5` | Keep | `[1, 2, 5, 5, 6, 9]` |
+| 3 | 2 | `5 > 5` | Keep | `[1, 2, 5, 5, 6, 9]` |
+| 4 | 0 | `1 > 2` | Keep | `[1, 2, 5, 5, 6, 9]` |
+| 4 | 1 | `2 > 5` | Keep | `[1, 2, 5, 5, 6, 9]` |
 
 Record the sorted suffix guaranteed after each pass, the total comparisons,
 and the total swaps. Why does the algorithm stop after Pass 4 even though the
 outer loop permits more passes?
+
+Because in that pass the swapped remains false, so the loop breaks. If no swaps happen in a pass, it means the array is soreted.
 
 ### 1.2 Insertion Sort: trace only
 
@@ -116,10 +118,12 @@ stops at the index check, so no further element comparison occurs.
 
 | `i` | Key | Element comparisons in order | Elements shifted | Insertion index | Array after insertion |
 |---|---|---|---|---|---|
-| 1 | 3 | `7 > 3` (true) | 7 | 0 | `[3, 7, 5, 8, 2]` |
-| 2 | 5 | TODO | TODO | TODO | TODO |
-| 3 | 8 | TODO | TODO | TODO | TODO |
-| 4 | 2 | TODO | TODO | TODO | TODO |
+| 1 | 3 | `7 > 3` (true) | 7 | 0 | `[3, 7, 5, 8, 2]` | 
+| 2 | 5 | `7 > 5` (true), `3 > 5` (false) | 5 | 1 | `[3, 5, 7, 8, 2]` |   j = 1; arr[1] = 7 j = 0
+| 3 | 8 | `7 > 8` (false) | None | 3 | `[3, 5, 7, 8, 2]` |   j = 2; arr[2] = 7;
+| 4 | 2 | `8 > 2` (true), `7 > 2` (true), `8 > 2` (true), `7 > 2` (true) | TODO | TODO | TODO |   
+
+j = 3; arr[3] = 8, arr[4] = 8, j = 2, arr[2] = 5, arr[3] = 7, j=1, arr[1] = 3
 
 Record the total comparisons and total shifts.
 
