@@ -154,11 +154,63 @@ traversal of the tree after insertion. The first two rows are worked.
 |---|---|---|---|
 | 40 | None (Root) | Root | `[40]` |
 | 20 | 40 | Left | `[20, 40]` |
-| 60 | TODO | TODO | TODO |
-| 10 | TODO | TODO | TODO |
-| 30 | TODO | TODO | TODO |
-| 50 | TODO | TODO | TODO |
+| 60 | 40 | right | [20,40,60] |
+| 10 | 20 | left | [10,20,40,60] |
+| 30 | 20 | right | [10,20,30,40,60] |
+| 50 | 40 | right | [10,20,30,40,50,60] |
 | 70 | TODO | TODO | TODO |
+
+```text
+BST-INSERT(T, key)
+  z = Node(key)
+  parent = None
+  current = T.root
+  while current != None
+    parent = current
+    if key < current.key
+      current = current.left
+    else if key > current.key
+      current = current.right
+    else
+      return current  // duplicate key
+  z.parent = parent
+  if parent == None
+    T.root = z
+  else if key < parent.key
+    parent.left = z
+  else
+    parent.right = z
+  return z
+
+TRANSPLANT(T, u, v)
+  if u.parent == None
+    T.root = v
+  else if u == u.parent.left
+    u.parent.left = v
+  else
+    u.parent.right = v
+  if v != None
+    v.parent = u.parent
+
+BST-DELETE(T, key)
+  z = BST-SEARCH(T.root, key)
+  if z == None
+    return None
+  if z.left == None
+    TRANSPLANT(T, z, z.right)
+  else if z.right == None
+    TRANSPLANT(T, z, z.left)
+  else
+    y = TREE-MINIMUM(z.right)
+    if y.parent != z
+      TRANSPLANT(T, y, y.right)
+      y.right = z.right
+      y.right.parent = y
+    TRANSPLANT(T, z, y)
+    y.left = z.left
+    y.left.parent = y
+  return z
+```
 
 ### 1.2 Trace: Deletion
 
@@ -178,7 +230,7 @@ worked.
 |---|---|---|---|---|
 | 10 | 0 children (leaf) | None | 10 | `[20, 30, 40, 50, 60, 70]` |
 | 20 | TODO | TODO | TODO | TODO |
-| 40 | TODO | TODO | TODO | TODO |
+| 40 | TODO | TODO | TODO | [30,50,60,70] |
 
 ### 1.3 Implementation
 
@@ -195,6 +247,7 @@ python3 bst_practice.py
 
 **TODO 1.4A:** In a two-child deletion (Case 3), why is the in-order successor
 guaranteed never to have a left child?
+because we are taking the minimum of the right subtree and that is the left most child, if it had another left child that would be smaller than it so that would actually be the min.
 
 **TODO 1.4B:** When deleting the root node of the tree, what special pointer
 updates must take place regarding `tree.root` and `node.parent`?
