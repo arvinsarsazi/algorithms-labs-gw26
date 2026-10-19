@@ -114,9 +114,9 @@ worked for you.
 | Key $k$ | Binary (8-bit) | Last 3 Bits | Division $k \bmod 8$ ($m = 8$) | Prime Division $k \bmod 7$ ($m = 7$) | Multiplication $\lfloor 8 \cdot ((k \cdot A) \bmod 1) \rfloor$ ($m = 8$) |
 |---|---|---|---|---|---|
 | 19 | `00010 011` | `011` | `19 % 8 = 3` | `19 % 7 = 5` | `floor(8 * 0.7426) = 5` |
-| 51 | `00110 011` | `011` | TODO | TODO | `floor(8 * 0.5197) = 4` |
-| 83 | `01010 011` | `011` | TODO | TODO | `floor(8 * 0.2968) = 2` |
-| 115 | `01110 011` | `011` | TODO | TODO | `floor(8 * 0.0739) = 0` |
+| 51 | `00110 011` | `011` | `51 % 8 = 3` | `51 % 7 = 2` | `floor(8 * 0.5197) = 4` |
+| 83 | `01010 011` | `011` | `83 % 8 = 3` | `83 % 7 = 6` | `floor(8 * 0.2968) = 2` |
+| 115 | `01110 011` | `011` | `115 % 8 = 3` | `115 % 7 = 3` | `floor(8 * 0.0739) = 0` |
 
 ### 1.2 Implementation
 
@@ -136,6 +136,8 @@ python3 hash_functions_practice.py
 **TODO 1.3:** Look at your `k mod 8` column vs. your `k mod 7` column in
 Table 1.1. Why did all four keys collide into slot `3` when $m = 8$, and why did
 choosing a prime table size ($m = 7$) spread them into different slots?
+
+In this case, all the four examples mod 8 had the same remainder, which also could be seen when looking at the binary representation of them(mod 8 means taking the last 3 digits). Mod 7 distrbutes these results much better.
 
 ---
 
@@ -229,9 +231,9 @@ are worked for you.
 |---|---|---|---|---|---|
 | 1 | `(12, "A")` | `12 % 7 = 5` | `[[12, "A"]]` | 1 | `1/7 ≈ 0.14` |
 | 2 | `(19, "B")` | `19 % 7 = 5` | `[[12, "A"], [19, "B"]]` | 2 | `2/7 ≈ 0.29` |
-| 3 | `(24, "C")` | TODO | TODO | TODO | TODO |
-| 4 | `(26, "D")` | TODO | TODO | TODO | TODO |
-| 5 | `(31, "E")` | TODO | TODO | TODO | TODO |
+| 3 | `(24, "C")` | `24 % 7 = 3` | `[[24, "C"]]` | 3 | `3/7 ≈ 0.43` |
+| 4 | `(26, "D")` | `26 % 7 = 5` | `[[12, "A"], [19, "B"], [26, "D"]] ` | 4 | `4/7 ≈ 0.57` |
+| 5 | `(31, "E")` | `31 % 7 = 3` | `[[24, "C"], [31,"E"]]` | 5 | `5/7 ≈ 0.72` |
 
 ### 2.2 Implementation
 
@@ -254,6 +256,8 @@ $2M = 8$, why do we have to recompute `key % new_capacity` for every key
 (for example, key `14` moves from bucket `14 % 4 = 2` to bucket `14 % 8 = 6`)
 instead of just copying bucket `2` from the old table into bucket `2` of the new
 table?
+
+As the table size doubles, the m has now doubles, so if we do the hashing it will now give a different place than it should. Also, we want to redistribute the nodes to the empty slots.
 
 ---
 

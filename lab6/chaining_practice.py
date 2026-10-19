@@ -61,7 +61,21 @@ def chaining_insert(table, key, value):
   4. If load_factor(table) > table.max_load, call chaining_rehash(table, 2 * table.capacity).
   """
   # TODO 2.2A: Implement Separate Chaining insertion and dynamic resize check.
-  raise NotImplementedError("Complete chaining_insert")
+
+  index = key % table.capacity
+  bucket = table.buckets[index]
+
+  for entry in bucket:
+    if entry[0] == key:
+      entry[1] = value
+      return
+
+  bucket.append([key, value])
+  table.size += 1
+
+  if table.size / table.capacity > table.max_load:
+    chaining_rehash(table, 2 * table.capacity)
+
 
 
 def chaining_lookup(table, key):
@@ -73,7 +87,12 @@ def chaining_lookup(table, key):
   3. If not found in the bucket, return None.
   """
   # TODO 2.2B: Scan bucket (key % table.capacity) for matching key and return its value or None.
-  raise NotImplementedError("Complete chaining_lookup")
+  
+  bucket = table.buckets[key % table.capacity]
+  for entry in bucket:
+    if entry[0] == key:
+      return entry[1]
+  return None
 
 
 if __name__ == "__main__":
